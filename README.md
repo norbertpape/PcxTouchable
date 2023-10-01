@@ -1,6 +1,6 @@
 PcxTouchable - Touchable Point Cloud Importer/Renderer for Unity
 =============================================
-[GIF](https://i.imgur.com/SXfEfhb.gif)
+![GIF](https://i.imgur.com/SXfEfhb.gif)
 
 Extension of Keijiro Takahashi's [Point Cloud Importer].
 
