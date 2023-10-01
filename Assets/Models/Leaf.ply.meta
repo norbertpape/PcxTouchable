@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 451a3e31eca3ab141add0aef14e7b156
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: f98dd4a60ae8afb46b679183b68898eb, type: 3}
+  _healingStyle: 1
+  _pointCountCap: 300000

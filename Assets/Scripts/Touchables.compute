@@ -1,0 +1,71 @@
+#pragma kernel Main
+
+#include "UnityCG.cginc"
+#include "./Runtime/Shaders/Common.cginc"
+
+float4x4 _Transform;
+float4x4 _TransformInv;
+
+float healParameter;
+float4 radii[23]; //it is wasteful to use a float4 array instead of a simple float array, 
+//but I have not gotten float arrays to work (most likely due to the GPU architecture).
+//Let me know if you know how to get around this issue!
+
+float4 HandBones[52];
+float radiusHandSq;
+int iFrom, iTo;
+
+RWStructuredBuffer<Point> pointsBuffer; 
+RWStructuredBuffer<Point> originalsBuffer; 
+RWStructuredBuffer<uint> healingProcess; 
+[numthreads(128,1,1)] 
+void Main(uint id : SV_DispatchThreadID) { 
+    Point pt = pointsBuffer [id];  
+    Point ptStyle = originalsBuffer [id];  
+    float3 ptWorld = mul(_Transform, float4(pt.position, 1.0)).xyz; 
+    for (int hand = iFrom; hand < iTo; hand += 26) { 
+        float3 dist = (ptWorld - HandBones[4 + hand].xyz);
+        if ( dot(dist, dist) < radiusHandSq ) { 
+            for (int i = hand; i < (18 + hand); i++) { 
+                        if ( ( (uint) (i - hand + 1) % 4) == 0) i++; 
+                        CLOSEST d = DistLinePoint(HandBones[i].xyz, HandBones[i+1].xyz, ptWorld); 
+                        if (d.distance < radii[(i-hand)].x) { 
+                            float3 u = ptWorld - d.dir; 
+                            ptWorld = u + 0.01*normalize(d.dir); 
+                            ptStyle.color |= 1; 
+                        } 
+                    } 
+            for (int j = 20+hand; j < 25+hand; j++){ 
+                CLOSEST d = DistTrianglePoint(HandBones[19+hand].xyz, HandBones[j].xyz, HandBones[j+1].xyz, ptWorld); 
+                float handThickness = radii[j-hand-2].x; 
+                if (d.distance < 0 ) { handThickness += 0.002; } else handThickness -= 0.005; 
+                if (abs(d.distance) < handThickness) { 
+                    float3 u = ptWorld - d.dir; 
+                    ptWorld = u + handThickness * normalize(d.dir);  
+                    ptStyle.color |= 1; 
+                } 
+            } 
+            pt.position = mul(_TransformInv, float4(ptWorld, 1.0)).xyz; 
+            pointsBuffer [id] = pt; 
+            originalsBuffer [id] = ptStyle; 
+        } 
+    }
+    if ( ptStyle.color & 1 ) { 
+        if ( ptStyle.color & 16 ) { 
+            float3 dir = ptStyle.position - pointsBuffer [id].position; 
+            float l = length(dir); 
+            if (l > (0.001 ) ) {  
+                pt.position += normalize(dir) * unity_DeltaTime[0] * healParameter; 
+                pointsBuffer [id] = pt; 
+                healingProcess [0] += 1; 
+            } else {  
+                pt.position = originalsBuffer [id].position; 
+                pointsBuffer [id] = pt; 
+                ptStyle.color -= 1; 
+                originalsBuffer [id] = ptStyle; 
+            } 
+        } 
+    } 
+}
+
+                
