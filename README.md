@@ -3,23 +3,22 @@ PcxTouchable - Touchable Point Cloud Importer/Renderer for Unity
 
 ![GIF](https://i.imgur.com/812R3yn.gif)
 
-Extension of Keijiro Takahashi's [Point Cloud Importer].
+This asset imports and renders PLY files, and makes them 'touchable' via the hand tracking of the Quest2 headsets.
+Created in collaboration with Simon Speiser for the choreographic object [Touching Clouds].
+
+[Touching Clouds]: https://norbertpape.github.io/digital.html
+
+Extension of Keijiro Takahashi's wonderful [Point Cloud Importer].
 
 [Point Cloud Importer]: https://github.com/keijiro/Pcx
 
-Made for standalone performance on the Quest2.
+Optimized for standalone performance on the Quest2.
 
 System Requirements
 -------------------
 
-- Unity 2019.4
-- Oculus Integration
-
-Supported Formats
------------------
-
-Currently Pcx only supports PLY binary little-endian format.
-
+- Unity 2022.3.4f1
+- Oculus Integration SDK
 
 Acknowledgements
 ----------------
