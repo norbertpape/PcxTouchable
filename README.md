@@ -1,7 +1,7 @@
 PcxTouchable - Touchable Point Cloud Importer/Renderer for Unity
 ================================================================
 
-![GIF](https://i.imgur.com/812R3yn.gif)
+![GIF](https://github.com/norbertpape/norbertpape.github.io/blob/main/images/TouchingClouds/TouchablePcx.gif)
 
 This asset imports and renders PLY files, and makes them 'touchable' via the hand tracking of the Quest2 headsets.
 Created in collaboration with Simon Speiser for the choreographic object [Touching Clouds].
